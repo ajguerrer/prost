@@ -1,0 +1,17 @@
+steps:
+- name: 'gcr.io/$PROJECT_ID/restore_cache'
+  args:
+  - '--bucket=gs://ajguerrer-prost'
+
+- name: 'gcr.io/$PROJECT_ID/rust'
+  env: ['CARGO_HOME=cargo']
+  entrypoint: 'bash'
+  args: ['-c', 'cargo criterion --no-run && sleep 10 && cargo criterion']
+
+- name: 'gcr.io/$PROJECT_ID/save_cache'
+  args:
+  - '--bucket=gs://ajguerrer-prost'
+  - '--path=cargo'
+  - '--path=target'
+
+timeout: 1200s
